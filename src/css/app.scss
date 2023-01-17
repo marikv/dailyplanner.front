@@ -1,0 +1,61 @@
+// app global css in SCSS form
+body {
+  background-color: #fafafa
+}
+.main-page {
+  background: rgb(2,0,36);
+  background: linear-gradient(45deg, rgba(2,0,36,1) 0%, rgba(99,9,121,1) 35%, rgba(0,33,162,1) 100%);
+}
+.border-radius-30 {
+  border-radius: 30px;
+}
+.border-radius-20 {
+  border-radius: 20px;
+}
+.border-radius-15 {
+  border-radius: 15px;
+}
+.border-radius-10 {
+  border-radius: 10px;
+}
+.white-glass {
+  /* From https://css.glass */
+  background: rgba(255, 255, 255, 0.88);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(7.2px);
+  -webkit-backdrop-filter: blur(7.2px);
+  border: 1px solid rgba(255, 255, 255, 0.34);
+}
+.bad-or-good-habit-toggle {
+  border: 1px solid $primary;
+}
+.z-index-9999 {
+  z-index: 9999;
+}
+@media (max-width: $breakpoint-xs-max) {
+  .q-dialog__inner--minimized {
+    padding-left: 12px;
+    padding-right: 12px;
+    .q-card__section--vert {
+      padding-left: 2px;
+      padding-right: 2px;
+    }
+  }
+  .close-dialog-icon {
+    margin-right: 4px;
+  }
+}
+.q-dialog__inner > div {
+  border-radius: 15px;
+}
+.btn-in-dialog-sticky-bottom {
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  bottom: 0;
+}
+.btn-in-dialog-sticky-top {
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  top: 0;
+}
