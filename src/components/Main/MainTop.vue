@@ -1,10 +1,5 @@
 <template>
-  <div>
-    <div>2022/11/01 - 2022/11/07</div>
-    <q-scroll-area class="">
-      <q-scroll-observer @scroll="scrollHandler" />
-    </q-scroll-area>
-  </div>
+  <div></div>
 </template>
 
 <script>

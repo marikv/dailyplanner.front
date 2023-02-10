@@ -102,7 +102,10 @@ module.exports = configure((ctx) => ({
 
   // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#framework
   framework: {
-    config: {},
+    config: {
+      notify: { /* look at QuasarConfOptions from the API card */ },
+      loading: { /* look at QuasarConfOptions from the API card */ },
+    },
 
     // iconSet: 'material-icons', // Quasar icon set
     // lang: 'en-US', // Quasar language pack
@@ -115,7 +118,10 @@ module.exports = configure((ctx) => ({
     // directives: [],
 
     // Quasar plugins
-    plugins: [],
+    plugins: [
+      'Notify',
+      'Loading',
+    ],
   },
 
   // animations: 'all', // --- includes all animations
@@ -167,59 +173,9 @@ module.exports = configure((ctx) => ({
     // extendInjectManifestOptions (cfg) {},
     // extendManifestJson (json) {}
     // extendPWACustomSWConf (esbuildConf) {}
-    metaVariablesFn() {
-      // ...
-      return [
-        {
-          // this entry will generate:
-          // <meta name="theme-color" content="ff0">
-          tagName: 'meta',
-          attributes: {
-            name: 'theme-color',
-            content: '#ff0',
-          },
-        },
-      ];
-    },
-    manifest: {
-      // name: 'Quasar Play',
-      // short_name: 'Quasar-Play',
-      // description: 'Quasar Framework Showcase',
-      // icons: [
-      //   {
-      //     'src': 'icons/icon-128x128.png',
-      //     'sizes': '128x128',
-      //     'type': 'image/png'
-      //   },
-      //   {
-      //     'src': 'icons/icon-192x192.png',
-      //     'sizes': '192x192',
-      //     'type': 'image/png'
-      //   },
-      //   {
-      //     'src': 'icons/icon-256x256.png',
-      //     'sizes': '256x256',
-      //     'type': 'image/png'
-      //   },
-      //   {
-      //     'src': 'icons/icon-384x384.png',
-      //     'sizes': '384x384',
-      //     'type': 'image/png'
-      //   },
-      //   {
-      //     'src': 'icons/icon-512x512.png',
-      //     'sizes': '512x512',
-      //     'type': 'image/png'
-      //   }
-      // ],
-      display: 'standalone',
-      orientation: 'portrait',
-      background_color: '#ffffff',
-      theme_color: '#ffffff',
-    },
     metaVariables: {
       appleMobileWebAppCapable: 'yes',
-      appleMobileWebAppStatusBarStyle: 'default',
+      appleMobileWebAppStatusBarStyle: 'default', // 'black-translucent', // 'black',
       appleTouchIcon120: 'icons/apple-icon-120x120.png',
       appleTouchIcon180: 'icons/apple-icon-180x180.png',
       appleTouchIcon152: 'icons/apple-icon-152x152.png',

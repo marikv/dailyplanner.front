@@ -3,12 +3,11 @@
     transition-show="slide-up"
     transition-hide="slide-down"
     :model-value="showAddDialog"
-    @update:model-value="showAddDialogChangedValue"
     full-height
     class="add-dialog"
   >
     <q-card class="full-height" style="width: 500px; max-width: 95vw;">
-      <dialog-header @clickCloseBtn="closeAddDialog"></dialog-header>
+      <dialog-header @clickCloseBtn="closeAddDialog()"></dialog-header>
       <q-card-section class="q-pt-xs">
         <div class="row">
           <div v-for="(step2item, step2Index) in step2Array"
@@ -72,7 +71,7 @@ export default {
   },
   setup() {
     const globalStore = useGlobalStore();
-    const showAddDialog = computed(() => globalStore.getShowAddDialog);
+    const showAddDialog = computed(() => globalStore.getShowDialog('AddDialog'));
 
     const step2Array = ref([{
       alias: 'goal',
@@ -95,13 +94,7 @@ export default {
     }]);
 
     const closeAddDialog = () => {
-      globalStore.setShowAddDialog(false);
-    };
-
-    const showAddDialogChangedValue = (v) => {
-      if (!v) {
-        closeAddDialog();
-      }
+      globalStore.setShowDialog('AddDialog', false);
     };
 
     const showStep2 = ref(false);
@@ -114,7 +107,6 @@ export default {
     return {
       showAddDialog,
       closeAddDialog,
-      showAddDialogChangedValue,
       setStep2,
       step2,
       showStep2,

@@ -70,12 +70,15 @@
 
 <script>
 import { ref } from 'vue';
-import { HelperString } from 'src/helpers/HelperString';
+import { Tools } from 'src/helpers/Tools';
 import { API } from 'src/api';
+import { AuthApi } from 'src/api/AuthApi';
+import { useGlobalStore } from 'stores/globalStore';
 
 export default {
   name: 'SignUpForm',
   setup() {
+    const globalStore = useGlobalStore();
     const showPassword = ref(false);
     const showConfirmPassword = ref(false);
     const passwordError = ref(false);
@@ -86,15 +89,17 @@ export default {
     const emailError = ref(false);
     const name = ref('');
     const nameError = ref(false);
-
+    const closeSettingsDialog = () => {
+      globalStore.setShowDialog('SettingsDialog', false);
+    };
     const register = () => {
       if (!name.value || name.value.length < 3) {
         nameError.value = true;
-      } else if (!HelperString.isEmail(email.value)) {
+      } else if (!Tools.isEmail(email.value)) {
         emailError.value = true;
-      } else if (!HelperString.isPassword(password.value)) {
+      } else if (!Tools.isPassword(password.value)) {
         passwordError.value = true;
-      } else if (!HelperString.isPassword(confirmPassword.value)) {
+      } else if (!Tools.isPassword(confirmPassword.value)) {
         confirmPasswordError.value = true;
       } else if (confirmPassword.value !== password.value) {
         confirmPasswordError.value = true;
@@ -105,7 +110,8 @@ export default {
           password: password.value,
           email: email.value,
         }).then((response) => {
-          console.log('response API', response);
+          AuthApi.setCurrentUser(response.data);
+          closeSettingsDialog();
         });
       }
     };
@@ -126,7 +132,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-
-</style>

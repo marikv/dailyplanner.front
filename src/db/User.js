@@ -1,10 +1,13 @@
+import { useAuthStore } from 'stores/authStore';
 import { db } from './db';
 
 export class User {
   static async getFirst() {
     let val;
+    const authStore = useAuthStore();
     await db.user.toCollection().first((res) => {
       val = res;
+      authStore.setCurrentUser(val);
     });
     return val;
   }

@@ -2,33 +2,47 @@
   <q-dialog
     transition-show="slide-up"
     transition-hide="slide-down"
-    :model-value="showSettingsDialog"
-    @update:model-value="showSettingsDialogChangedValue"
+    :model-value="settingsDialog"
     full-height
     class="add-dialog">
     <q-card class="full-height" style="width: 500px; max-width: 95vw;">
-      <dialog-header @clickCloseBtn="closeAddDialog"></dialog-header>
+      <dialog-header @clickCloseBtn="closeSettingsDialog()"></dialog-header>
       <q-card-section class="q-pt-xs">
         <q-list :bordered="false">
 
-          <q-item v-if="!currentUser.token" clickable v-ripple @click="showAuthDialog = true">
+          <q-item clickable v-ripple>
             <q-item-section avatar>
               <q-avatar text-color="primary" icon="las la-user" />
             </q-item-section>
             <q-item-section>
-              <q-item-label class="text-subtitle1">
-                {{currentUser.name || 'Guest'}}
+              <q-item-label
+                v-if="!currentUser.token"
+                @click="openAuthDialog()"
+                class="text-subtitle1">
+                Guest
+              </q-item-label>
+              <q-item-label
+                v-else
+                @click="logout()"
+                class="text-subtitle1">
+                {{currentUser.token ? currentUser.name : 'Guest'}}
               </q-item-label>
             </q-item-section>
-            <q-item-section side>Sign In/Up</q-item-section>
-
+            <q-item-section v-if="!currentUser.token"
+                            @click="openAuthDialog()"
+                            side>Sign In/Up</q-item-section>
+            <q-item-section v-else
+                            @click="logout()"
+                            side>
+              <q-btn color="secondary" label="Log out"></q-btn>
+            </q-item-section>
             <q-dialog
               transition-show="slide-left"
               transition-hide="slide-right"
-              v-model="showAuthDialog"
+              v-model="authDialog"
               full-height>
               <q-card class="full-height" style="width: 500px; max-width: 95vw;">
-                <dialog-header @clickCloseBtn="showAuthDialog = false"></dialog-header>
+                <dialog-header @clickCloseBtn="closeAuthDialog()"></dialog-header>
                 <q-card-section class="scroll">
                   <AuthForm></AuthForm>
                 </q-card-section>
@@ -52,11 +66,12 @@
 </template>
 
 <script>
-import { computed, ref } from 'vue';
 import { useGlobalStore } from 'stores/globalStore';
 import DialogHeader from 'components/Dialogs/DialogHeader.vue';
 import AuthForm from 'components/Auth/AuthForm.vue';
 import { User } from 'src/db/User';
+import { useAuthStore } from 'stores/authStore';
+import { computed, watchEffect } from 'vue';
 
 export default {
   name: 'SettingsDialog',
@@ -65,30 +80,47 @@ export default {
     DialogHeader,
   },
   async setup() {
-    const showAuthDialog = ref(false);
-    const currentUser = ref({ name: 'Guest' });
     const globalStore = useGlobalStore();
-    const showSettingsDialog = computed(() => globalStore.getShowSettingsDialog);
-
-    await User.getFirst().then((user) => {
-      currentUser.value = user;
-    });
-    const closeAddDialog = () => {
-      globalStore.setShowSettingsDialog(false);
+    const authStore = useAuthStore();
+    const settingsDialog = computed(() => globalStore.getShowDialog('SettingsDialog'));
+    const authDialog = computed(() => globalStore.getShowDialog('AuthDialog'));
+    const currentUser = computed(() => authStore.getCurrentUser);
+    const closeSettingsDialog = () => {
+      globalStore.setShowDialog('SettingsDialog', false);
+    };
+    const openAuthDialog = () => {
+      globalStore.setShowDialog('AuthDialog', true);
+    };
+    const closeAuthDialog = () => {
+      globalStore.setShowDialog('AuthDialog', false);
+    };
+    const logout = () => {
+      const currentUser2 = currentUser.value;
+      currentUser2.token = '';
+      currentUser2.name = '';
+      currentUser2.email = '';
+      currentUser2.password = '';
+      User.update(currentUser2);
+      authStore.setCurrentUser(currentUser2);
+      closeAuthDialog();
+      closeSettingsDialog();
     };
 
-    const showSettingsDialogChangedValue = (v) => {
-      if (!v) {
-        closeAddDialog();
+    watchEffect(() => {
+      if (currentUser.value.id > 0) {
+        closeAuthDialog();
+        closeSettingsDialog();
       }
-    };
+    });
 
     return {
-      showSettingsDialog,
-      closeAddDialog,
-      showSettingsDialogChangedValue,
+      settingsDialog,
+      closeSettingsDialog,
       currentUser,
-      showAuthDialog,
+      authDialog,
+      openAuthDialog,
+      closeAuthDialog,
+      logout,
     };
   },
 };

@@ -3,7 +3,6 @@
     transition-show="slide-up"
     transition-hide="slide-down"
     :model-value="showAddDialog"
-    @update:model-value="showAddDialogChangedValue"
     full-height
     class="add-dialog"
   >
@@ -72,16 +71,10 @@ export default {
   setup() {
     const $q = useQuasar();
     const globalStore = useGlobalStore();
-    const showAddDialog = computed(() => globalStore.getShowAddDialog);
+    const showAddDialog = computed(() => globalStore.getShowDialog('AddDialog'));
 
     const closeAddDialog = () => {
-      globalStore.setShowAddDialog(false);
-    };
-
-    const showAddDialogChangedValue = (v) => {
-      if (!v) {
-        closeAddDialog();
-      }
+      globalStore.setShowDialog('AddDialog', false);
     };
 
     const conentHeight = $q.screen.height - 170;
@@ -91,7 +84,6 @@ export default {
       innerStyle,
       showAddDialog,
       closeAddDialog,
-      showAddDialogChangedValue,
       tab: ref('goal'),
     };
   },

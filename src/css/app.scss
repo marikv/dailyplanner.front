@@ -1,10 +1,11 @@
 // app global css in SCSS form
 body {
-  background-color: #fafafa
+  background-color: $primary;
 }
 .main-page {
-  background: rgb(2,0,36);
-  background: linear-gradient(45deg, rgba(2,0,36,1) 0%, rgba(99,9,121,1) 35%, rgba(0,33,162,1) 100%);
+  background-color: $primary;
+  //background: rgb(2,0,36);
+  //background: linear-gradient(45deg, rgba(2,0,36,1) 0%, rgba(99,9,121,1) 35%, rgba(0,33,162,1) 100%);
 }
 .border-radius-30 {
   border-radius: 30px;
@@ -35,8 +36,8 @@ body {
 }
 @media (max-width: $breakpoint-xs-max) {
   .q-dialog__inner--minimized {
-    padding-left: 12px;
-    padding-right: 12px;
+    padding-left: 2px;
+    padding-right: 2px;
     .q-card__section--vert {
       padding-left: 2px;
       padding-right: 2px;
@@ -58,4 +59,14 @@ body {
   position: -webkit-sticky; /* Safari */
   position: sticky;
   top: 0;
+}
+.bounce-bg-color {
+  animation: bg-yellow-to-white 3.5s ease-out;
+}
+@keyframes bg-yellow-to-white {
+  from {background-color: rgba(255, 227, 44, 0.4);}
+  to {background-color: rgba(255, 255, 255, 0);}
+}
+.add-todo-description::placeholder {
+  color: #9a9a9a;
 }

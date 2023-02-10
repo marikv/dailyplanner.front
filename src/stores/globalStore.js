@@ -2,21 +2,18 @@ import { defineStore } from 'pinia';
 
 export const useGlobalStore = defineStore('global', {
   state: () => ({
-    showAddDialog: false,
-    showSettingsDialog: false,
+    showDialog: {},
     showLeftDrawer: true,
   }),
   getters: {
-    getShowAddDialog: (state) => state.showAddDialog,
-    getShowSettingsDialog: (state) => state.showSettingsDialog,
+    getShowDialog(state) {
+      return (dialogName) => !!state.showDialog[dialogName];
+    },
     getShowLeftDrawer: (state) => state.showLeftDrawer,
   },
   actions: {
-    setShowAddDialog(v) {
-      this.showAddDialog = v;
-    },
-    setShowSettingsDialog(v) {
-      this.showSettingsDialog = v;
+    setShowDialog(dialogName, value) {
+      this.showDialog[dialogName] = value;
     },
     setShowLeftDrawer(v) {
       this.showLeftDrawer = v;

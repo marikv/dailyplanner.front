@@ -1,81 +1,133 @@
 <template>
-  <q-footer>
-    <q-toolbar>
+<!--  <div class="fixed-bottom">-->
+  <q-footer class="bg-deep-purple-10 q-pb-lg">
+    <q-toolbar
+      class="bg-deep-purple-10">
       <q-btn
         flat
-        dense
-        v-if="isAdmin"
-        size="lg"
+        :dense="true"
+        size="md"
+        color="white"
         round
-        icon="las la-bars"
-        aria-label="Menu"
-        @click="toggleLeftDrawer"
-      />
-      <q-btn
-        flat
-        dense
-        size="xl"
-        round
-        icon="las la-list"
+        icon="las la-home"
         aria-label="Dashboard"
         @click="toggleLeftDrawer"
+        class="bg-deep-purple-10"
       />
       <q-space></q-space>
       <q-btn
         flat
-        dense
-        size="xl"
+        :dense="true"
+        size="md"
+        color="white"
+        round
+        icon="las la-calendar"
+        aria-label="Calendar"
+        @click="toggleLeftDrawer"
+        class="bg-deep-purple-10"
+      />
+      <q-space></q-space>
+      <div class="relative-position">
+<!--        <q-btn-->
+<!--          flat-->
+<!--          :dense="false"-->
+<!--          size="xl"-->
+<!--          color="white"-->
+<!--          round-->
+<!--          icon="las la-plus"-->
+<!--          @click="openAddDialog"-->
+<!--          class="bg-secondary absolute-center"-->
+<!--        />-->
+        <q-fab
+          vertical-actions-align="center"
+          color="primary"
+          icon="las la-plus"
+          direction="up"
+        >
+          <q-fab-action color="accent" @click="openAddTodoDialog"
+                        icon="lar la-check-circle" label="To-Do" />
+          <q-fab-action color="primary" @click="openAddDialog"
+                        icon="mail" label="Email" />
+          <q-fab-action color="secondary" @click="openAddDialog"
+                        icon="alarm" label="Alarm" />
+          <q-fab-action color="orange" @click="openAddDialog"
+                        icon="airplay" label="Airplay" />
+        </q-fab>
+      </div>
+      <q-space></q-space>
+      <q-btn
+        flat
+        :dense="true"
+        size="md"
+        color="white"
         round
         icon="las la-chart-bar"
         aria-label="Progress"
         @click="toggleLeftDrawer"
+        class="bg-deep-purple-10"
       />
       <q-space></q-space>
       <q-btn
         flat
-        dense
-        size="xl"
-        round
-        icon="las la-plus-circle"
-        @click="toggleAddDialog"
-      />
-      <q-space></q-space>
-      <q-btn
-        flat
-        dense
-        size="xl"
+        :dense="true"
+        size="md"
+        color="white"
         round
         icon="las la-user-cog"
         aria-label="User"
-        @click="toggleSettingsDialog"
+        @click="openSettingsDialog"
+        class="bg-deep-purple-10"
       />
     </q-toolbar>
+
+    <AddDialog></AddDialog>
+    <AddDialogTodo></AddDialogTodo>
+
+    <Suspense>
+      <!-- main content -->
+      <SettingsDialog></SettingsDialog>
+      <!-- loading state -->
+<!--      <template #fallback>-->
+<!--        Loading...-->
+<!--      </template>-->
+    </Suspense>
+<!--  </div>-->
   </q-footer>
 </template>
 
 <script>
 import { useGlobalStore } from 'stores/globalStore';
-import { ref } from 'vue';
+import SettingsDialog from 'components/Dialogs/SettingsDialog.vue';
+import AddDialog from 'components/Dialogs/AddDialog.vue';
+import AddDialogTodo from 'components/Dialogs/AddDialogTodo.vue';
+// import AddDialog from 'components/Dialogs/AddDialogWithTabs.vue';
 
 export default {
   name: 'FooterComponent',
+  components: {
+    AddDialogTodo,
+    AddDialog,
+    SettingsDialog,
+  },
   setup() {
-    const isAdmin = ref(false);
     const globalStore = useGlobalStore();
-    const toggleAddDialog = () => {
-      globalStore.setShowAddDialog(!globalStore.getShowAddDialog);
+    const openAddDialog = () => {
+      globalStore.setShowDialog('AddDialog', true);
     };
-    const toggleSettingsDialog = () => {
-      globalStore.setShowSettingsDialog(!globalStore.getShowSettingsDialog);
+    const openSettingsDialog = () => {
+      globalStore.setShowDialog('SettingsDialog', true);
+    };
+    const openAddTodoDialog = () => {
+      globalStore.setShowDialog('AddTodoDialog', true);
     };
     const toggleLeftDrawer = () => {
       globalStore.setShowLeftDrawer(!globalStore.getShowLeftDrawer);
     };
     return {
       toggleLeftDrawer,
-      toggleAddDialog,
-      toggleSettingsDialog,
-      isAdmin,
+      openAddDialog,
+      openSettingsDialog,
+      openAddTodoDialog,
     };
   },
 };

@@ -25,23 +25,26 @@
     </q-tab-panels>
 
     <q-separator />
-
     <SocialButtons></SocialButtons>
   </div>
 </template>
 
 <script>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import SignUpForm from 'components/Auth/SignUpForm.vue';
 import SignInForm from 'components/Auth/SignInForm.vue';
 import SocialButtons from 'components/Auth/SocialButtons.vue';
+import { useAuthStore } from 'stores/authStore';
 
 export default {
   name: 'AuthForm',
   components: { SocialButtons, SignInForm, SignUpForm },
   setup() {
+    const authStore = useAuthStore();
+    const currentUser = computed(() => authStore.getCurrentUser);
     return {
       tab: ref('register'),
+      currentUser,
     };
   },
 };

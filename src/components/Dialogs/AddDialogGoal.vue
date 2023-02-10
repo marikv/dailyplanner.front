@@ -258,7 +258,7 @@
                  class="q-mx-auto"
                  style="min-width: 200px;"
                  color="primary"
-                 @click="addNewHabit"
+                 @click="addNewGoal"
                  label="Save"></q-btn>
         </dialog-bottom>
       </q-card>
@@ -323,7 +323,8 @@ import { ref } from 'vue';
 import { date } from 'quasar';
 import DialogHeader from 'components/Dialogs/DialogHeader.vue';
 import DialogBottom from 'components/Dialogs/DialogBottom.vue';
-import { Goals } from 'src/db/Goals';
+import { Tasks } from 'src/db/Tasks';
+import { useTasksStore } from 'stores/tasksStore';
 
 export default {
   name: 'AddDialogGoal',
@@ -332,6 +333,7 @@ export default {
     DialogHeader,
   },
   setup() {
+    const tasksStore = useTasksStore();
     const isBadGoal = ref(false);
     const showChooseIconDialog = ref(false);
     const weekDays = ref(['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su']);
@@ -500,6 +502,7 @@ export default {
     ]);
     const timeStamp = Date.now();
     const newGoal = ref({
+      isGoal: 1,
       isBadGoal: isBadGoal.value,
       name: null,
       icon: iconSelected.value,
@@ -544,7 +547,7 @@ export default {
       showChooseIconDialog.value = false;
     };
     const newGoalNameError = ref(false);
-    const addNewHabit = () => {
+    const addNewGoal = () => {
       let hasErrors = false;
       if (!newGoal.value.name) {
         hasErrors = true;
@@ -553,7 +556,9 @@ export default {
       if (hasErrors) {
         return false;
       }
-      Goals.addNew({ ...newGoal.value });
+      const newTask = { ...newGoal.value };
+      tasksStore.addNewTask(newTask);
+      Tasks.addNew(newTask);
       return true;
     };
     return {
@@ -572,7 +577,7 @@ export default {
       setIconColorSelected,
       iconSelected,
       applyIconAndColor,
-      addNewHabit,
+      addNewGoal,
       newGoalNameError,
     };
   },
